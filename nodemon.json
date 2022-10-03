@@ -1,0 +1,11 @@
+{
+  "watch": [
+    "backend/.env",
+    "backend/server/"
+  ],
+  "ignore": [
+    "server/public/"
+  ],
+  "ext": "ts,json",
+  "exec": "ts-node --esm backend/server/index.ts"
+}
