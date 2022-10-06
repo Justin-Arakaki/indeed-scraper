@@ -1,5 +1,7 @@
 {
+  "extends": "ts-node/node16/tsconfig.json",
   "compilerOptions": {
+    "baseUrl": "./backend",
     "target": "ESNext",
     "useDefineForClassFields": true,
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
@@ -17,5 +19,9 @@
     "jsx": "react-jsx"
   },
   "include": ["frontend", "backend"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "references": [{ "path": "./tsconfig.node.json" }],
+  "ts-node": {
+    "esm": true,
+    "experimentalSpecifierResolution": "node"
+  }
 }

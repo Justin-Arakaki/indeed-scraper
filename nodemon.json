@@ -6,6 +6,7 @@
   "ignore": [
     "server/public/"
   ],
-  "ext": "ts,json",
-  "exec": "ts-node --esm backend/server/index.ts"
+  "ext": "ts",
+  "exec": "ts-node backend/server/services/indeed-crawler.ts",
+  "thing": {"exec": "ts-node backend/server/index.ts"}
 }

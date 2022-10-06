@@ -7,6 +7,7 @@
     "dev": "npm-run-all --silent --parallel dev:*",
     "dev:client": "vite",
     "dev:server": "nodemon",
+    "start": "ts-node backend/server/index.ts",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "prepare": "husky install"
@@ -16,6 +17,7 @@
     "dayjs": "^1.11.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.1",
+    "puppeteer": "^18.0.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
