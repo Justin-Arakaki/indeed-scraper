@@ -7,6 +7,6 @@
     "server/public/"
   ],
   "ext": "ts",
-  "exec": "ts-node backend/server/services/indeed-crawler.ts",
+  "exec": "ts-node backend/server/test/test.ts",
   "thing": {"exec": "ts-node backend/server/index.ts"}
 }

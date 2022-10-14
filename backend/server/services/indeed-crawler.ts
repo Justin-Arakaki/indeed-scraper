@@ -1,29 +1,31 @@
 import puppeteer from "puppeteer";
 import retry from "../lib/retry";
-import JobListing from "../data/JobListing";
+import JobListing from "../models/JobListing";
+import searchKeywords from "../lib/search";
 
-export interface JobPageInfo {
+export interface PageInfo {
   id: string;
   jobTitle: string;
 }
 
-export default async function startIndeedScraper(
+export default async function getIndeedJobListings(
   jobTitle: string,
   jobLocation: string,
-  numPages: number
+  numPages: number,
+  keywords: string[]
 ): Promise<JobListing[]> {
   const browser = await puppeteer.launch({ headless: false });
   const page = await browser.newPage();
-  const baseUrl = 'https://www.indeed.com/';
-  const encodedJobTitle = encodeURIComponent(jobTitle);
-  const encodedJobLocation = encodeURIComponent(jobLocation);
-  const url = `${baseUrl}jobs?q=${encodedJobTitle}&l=${encodedJobLocation}`;
+  const url = createSearchUrl(jobTitle, jobLocation);
   const jobListings: JobListing[] = [];
 
   await page.goto(url, { waitUntil: "domcontentloaded" });
   for (let i = 1; i <= numPages; i++) {
-    await getJobs(page, jobListings);
-    await retry(3, async () => await clickNext(page));
+    await getJobs(page, jobListings, keywords);
+    await retry(1, async () => {
+      console.log('--Next Page--');
+      await clickNext(page);
+    });
   }
   await Promise.all([
     page.close(),
@@ -32,22 +34,35 @@ export default async function startIndeedScraper(
   return jobListings;
 }
 
+function createSearchUrl(jobTitle: string, jobLocation: string): string {
+  const baseUrl = 'https://www.indeed.com/';
+  const encodedJobTitle = encodeURIComponent(jobTitle);
+  const encodedJobLocation = encodeURIComponent(jobLocation);
+  return `${baseUrl}jobs?q=${encodedJobTitle}&l=${encodedJobLocation}`;
+}
+
 async function getJobs(
   page: puppeteer.Page,
-  jobListings: JobListing[]
+  jobListings: JobListing[],
+  keywords: string[]
 ): Promise<void> {
   const jobs = await getJobButtons(page);
   let jobDesc: string;
   for (const job of jobs) {
-    await retry(1, async () => {
+    await retry(2, async () => {
       console.log(job.jobTitle);
       jobDesc = await getJobDesc(page, job);
-      jobListings.push({ jobTitle: job.jobTitle, jobDescription: jobDesc });
+      const jobHits = searchKeywords(jobDesc, keywords);
+      jobListings.push({
+        jobTitle: job.jobTitle,
+        jobDescription: jobDesc,
+        jobHits
+      });
     });
   }
 }
 
-async function getJobButtons(page: puppeteer.Page): Promise<JobPageInfo[]> {
+async function getJobButtons(page: puppeteer.Page): Promise<PageInfo[]> {
   const jobTitlesSelector = '.jobTitle > a';
   return await page.$$eval(jobTitlesSelector, a => {
     return a.map(x => ({
@@ -59,12 +74,12 @@ async function getJobButtons(page: puppeteer.Page): Promise<JobPageInfo[]> {
 
 async function getJobDesc(
   page: puppeteer.Page,
-  job: JobPageInfo
+  job: PageInfo
 ): Promise<string> {
   const jobDescSelector = '#jobDescriptionText';
   await Promise.all([
     page.click('#' + job.id),
-    page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 3000 })
+    page.waitForNavigation({ timeout: 2000 })
   ]);
   try {
     return await page.$eval(jobDescSelector, el => el.innerHTML);
@@ -77,6 +92,6 @@ async function clickNext(page: puppeteer.Page): Promise<void> {
   const nextPageSelector = 'a[data-testid="pagination-page-next"]';
   await Promise.all([
     page.click(nextPageSelector),
-    page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 3000 })
+    page.waitForNavigation({ timeout: 10000 })
   ]);
 }

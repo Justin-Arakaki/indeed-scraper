@@ -18,7 +18,7 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["frontend", "backend"],
+  "include": ["frontend", "backend", "run.ts"],
   "references": [{ "path": "./tsconfig.node.json" }],
   "ts-node": {
     "esm": true,

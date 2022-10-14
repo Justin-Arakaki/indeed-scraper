@@ -6,7 +6,7 @@ export default async function retry<T>(
     try {
       return await callback();
     } catch (e) {
-      console.error(e, 'Retrying...');
+      console.error('Retrying...');
     }
   }
   console.error('Max retries. Sad.');
