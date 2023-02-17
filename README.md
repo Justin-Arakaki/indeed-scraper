@@ -15,6 +15,7 @@ Requirements: [Node.js](https://nodejs.org/) and [TSnode](https://typestrong.org
 Example: `npm run test 'web developer' 'los angeles' 5`
 
 This will search through 5 pages on indeed and search for keywords found in test.ts
+
 Note: Delays were added to avoid bot detection.
 
 # Background
