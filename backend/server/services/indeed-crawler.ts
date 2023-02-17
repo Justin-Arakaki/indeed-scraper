@@ -2,6 +2,7 @@ import puppeteer from "puppeteer";
 import retry from "../lib/retry";
 import JobListing from "../models/JobListing";
 import searchKeywords from "../lib/search";
+import wait from "../lib/wait";
 
 export interface PageInfo {
   id: string;
@@ -78,6 +79,7 @@ async function getJobDesc(
 ): Promise<string> {
   const jobDescSelector = '#jobDescriptionText';
   await Promise.all([
+    wait(2100),
     page.click('#' + job.id),
     page.waitForNavigation({ timeout: 2000 })
   ]);
@@ -91,6 +93,7 @@ async function getJobDesc(
 async function clickNext(page: puppeteer.Page): Promise<void> {
   const nextPageSelector = 'a[data-testid="pagination-page-next"]';
   await Promise.all([
+    wait(2000),
     page.click(nextPageSelector),
     page.waitForNavigation({ timeout: 10000 })
   ]);
