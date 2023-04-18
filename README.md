@@ -1,12 +1,12 @@
 # Job Market Analyzer
 
+WARNING: Currently does not work! Indeed continuously updates their site to detect scrapers.
+
 A scraper for Indeed.com for job seekers to determine what technologies are in demand.
 
 This project uses: Node.js, TSnode, Typescript, and Puppeteer
 
 # Getting Started
-
-WARNING: Currently does not work! Indeed continuously updates their site to detect scrapers.
 
 Requirements: [Node.js](https://nodejs.org/) and [TSnode](https://typestrong.org/ts-node/)
 
