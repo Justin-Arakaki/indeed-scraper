@@ -6,6 +6,8 @@ This project uses: Node.js, TSnode, Typescript, and Puppeteer
 
 # Getting Started
 
+WARNING: Currently does not work! Indeed continuously updates their site to detect scrapers.
+
 Requirements: [Node.js](https://nodejs.org/) and [TSnode](https://typestrong.org/ts-node/)
 
 1. Clone repository with `git clone git@github.com:Justin-Arakaki/job-market-analyzer.git`
