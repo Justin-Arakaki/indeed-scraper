@@ -1,6 +1,6 @@
 # Job Market Analyzer
 
-WARNING: Currently does not work! Indeed continuously updates their site to detect scrapers.
+🚨 WARNING: Currently does not work! Indeed continuously updates their site to detect scrapers.
 
 A scraper for Indeed.com for job seekers to determine what technologies are in demand.
 
